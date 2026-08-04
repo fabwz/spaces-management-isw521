@@ -62,3 +62,13 @@ verificable, no solo que sea determinista.
 
 *(Las entradas reales del equipo van debajo de esta línea, en orden
 cronológico.)*
+
+## 2026-08-04 — CHECK constraints no son un método nativo del Blueprint
+
+**Autor: Luis Giovanni Sandi Azofeifa**
+**Contexto:** Implementar la migración de `reservas_aulas`, que en el esquema oficial tiene dos `CHECK` constraints (`hora_fin > hora_inicio` y `fecha_fin IS NULL OR fecha_fin >= fecha_inicio`).
+**Consulta a la IA:** Se le pidió generar la migración de Laravel replicando exactamente el esquema SQL oficial, incluyendo los CHECK.
+**Qué se aceptó:** La estructura general de columnas, tipos y foreign keys generada por la IA.
+**Qué se rechazó y por qué:** El uso de `$table->check(...)` dentro del closure de `Schema::create`, porque no existe como método del Blueprint de Laravel — el `php artisan migrate` falló con `BadMethodCallException: Method Illuminate\Database\Schema\Blueprint::check does not exist`.
+**Error detectado:** La IA generó una sintaxis inventada asumiendo que el schema builder soporta CHECK constraints igual que otros motores. Se descubrió al correr la migración, y se corrigió moviendo ambos CHECK a `DB::statement('ALTER TABLE ... ADD CONSTRAINT ... CHECK (...)')` ejecutado después del `Schema::create`.
+**Aprendizaje:** El schema builder de Laravel no cubre toda la sintaxis SQL — features menos comunes como CHECK constraints hay que agregarlas con SQL crudo vía `DB::statement()`, y conviene verificar la documentación oficial de Laravel en vez de asumir que el ORM soporta 1:1 lo que el motor de base de datos permite.
