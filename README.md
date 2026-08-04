@@ -1,58 +1,82 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Spaces Management ISW-521
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Módulo de Gestión de Espacios Físicos — Grilla Única y Motor de Asignación
+de Aulas. Proyecto de Programación en Ambiente Web I (ISW-521), UTN Sede
+San Carlos, II Cuatrimestre 2026.
 
-## About Laravel
+Cubre los requerimientos AU-01 (Inventario y Grilla), AU-02 (Sugerencia
+Automática de Aula), AU-03 (Bloqueo por Choque de Espacio) y AU-06
+(Reservas Puntuales y Préstamos de Espacios), adaptados del SRS v1.2 del
+Sistema Integrado de Gestión Académica y Docente de la UTN.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Stack técnico
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- TALL Stack: Tailwind CSS + Alpine.js + Laravel 13 + Livewire
+- TypeScript
+- Autenticación JWT
+- API REST externa (en confirmación, ver `context/architecture.md`)
+- Pruebas unitarias con Pest
+- Arquitectura Hexagonal (Ports & Adapters) + Domain-Driven Design
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Requisitos
 
-## Learning Laravel
+- PHP 8.3+
+- Composer
+- Node.js + npm
+- MySQL (o el motor configurado en `.env`)
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
-
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
-
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
-
-## Agentic Development
-
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+## Instalación
 
 ```bash
-composer require laravel/boost --dev
+git clone https://github.com/fabwz/spaces-management-isw521.git
+cd spaces-management-isw521
 
-php artisan boost:install
+composer install
+cp .env.example .env
+php artisan key:generate
+
+npm install
+npm run build
+
+php artisan migrate --seed
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+## Levantar el entorno de desarrollo
 
-## Contributing
+```bash
+php artisan serve
+npm run dev
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## Pruebas
 
-## Code of Conduct
+```bash
+php artisan test
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## Estructura del proyecto
 
-## Security Vulnerabilities
+La lógica de dominio vive en `app/Contexts/GestionEspacios/`, organizada
+en Arquitectura Hexagonal (Domain / Application / Infrastructure). El
+detalle completo de capas, convenciones y modelo de ramas está en
+`context/architecture.md`.
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Documentación del proyecto para el equipo y para IA (Claude Code):
 
-## License
+```
+.claude/CLAUDE.md              # reglas del proyecto
+context/requirements.md        # requerimientos funcionales (AU-01/02/03/06)
+context/business-rules.md      # reglas de negocio y esquema de BD oficial
+context/architecture.md        # arquitectura, capas y modelo de ramas
+context/technical-logbook.md   # bitácora de decisiones técnicas e IA
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## Equipo
+
+- Fabián Zamora
+- Giovanni Sandi
+- Marypaz Lopez
+
+## Docente
+
+Bryan Miguel Chaves Salas
