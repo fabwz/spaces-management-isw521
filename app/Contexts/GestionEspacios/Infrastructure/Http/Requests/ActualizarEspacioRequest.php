@@ -16,7 +16,7 @@ class ActualizarEspacioRequest extends FormRequest
         return [
             'recinto_id' => ['required', 'integer', 'exists:recintos,id'],
             'nombre' => ['required', 'string', 'max:30'],
-            'piso' => ['nullable', 'integer'],
+            'piso' => ['nullable', 'string', 'max:10'],
             'tipo' => [
                 'required',
                 'string',

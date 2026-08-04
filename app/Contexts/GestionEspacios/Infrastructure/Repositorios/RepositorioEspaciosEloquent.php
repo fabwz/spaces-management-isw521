@@ -18,7 +18,7 @@ final class RepositorioEspaciosEloquent implements RepositorioEspacios
         $modelo->fill([
             'recinto_id' => $espacio->recintoId(),
             'nombre' => $espacio->nombre(),
-            'piso' => $espacio->piso() !== null ? (string) $espacio->piso() : null,
+            'piso' => $espacio->piso(),
             'tipo' => $espacio->tipo(),
             'capacidad' => $espacio->capacidad()?->valor(),
             'no_disponible_desde' => $espacio->noDisponibleDesde(),
@@ -54,7 +54,7 @@ final class RepositorioEspaciosEloquent implements RepositorioEspacios
             $modelo->id,
             (int) $modelo->recinto_id,
             $modelo->nombre,
-            $modelo->piso !== null ? (int) $modelo->piso : null,
+            $modelo->piso,
             $modelo->tipo,
             $modelo->capacidad !== null ? new Capacidad($modelo->capacidad) : null,
             $modelo->no_disponible_desde?->format('Y-m-d'),
