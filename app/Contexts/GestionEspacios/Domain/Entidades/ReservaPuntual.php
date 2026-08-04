@@ -2,6 +2,7 @@
 
 namespace App\Contexts\GestionEspacios\Domain\Entidades;
 
+use App\Contexts\GestionEspacios\Domain\Exceptions\TransicionEstadoInvalidaException;
 use App\Contexts\GestionEspacios\Domain\ValueObjects\Intervalo;
 use App\Contexts\GestionEspacios\Domain\ValueObjects\TipoUso;
 
@@ -84,5 +85,32 @@ final class ReservaPuntual
     public function estado(): string
     {
         return $this->estado;
+    }
+
+    public function aprobar(): void
+    {
+        if ($this->estado !== 'Solicitada') {
+            throw TransicionEstadoInvalidaException::paraReserva($this->estado, 'Aprobada');
+        }
+
+        $this->estado = 'Aprobada';
+    }
+
+    public function rechazar(): void
+    {
+        if ($this->estado !== 'Solicitada') {
+            throw TransicionEstadoInvalidaException::paraReserva($this->estado, 'Rechazada');
+        }
+
+        $this->estado = 'Rechazada';
+    }
+
+    public function cancelar(): void
+    {
+        if (! in_array($this->estado, ['Solicitada', 'Aprobada'], true)) {
+            throw TransicionEstadoInvalidaException::paraReserva($this->estado, 'Cancelada');
+        }
+
+        $this->estado = 'Cancelada';
     }
 }
