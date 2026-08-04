@@ -138,16 +138,23 @@ commitea directo a `main`, sin importar si estaba anticipada aquí o no".
 main
 ├── feature/project-setup            # Laravel + carpetas + .claude/ + context/ + README
 ├── feature/persistence-skeleton     # Avance 1: migrations, models, factories, seeders
-├── feature/domain-core              # Intervalo, Entidades, Puertos
-├── feature/au-03-choque-espacio     # bloqueante para au-02 y au-06
+├── feature/domain-core              # Entidades y Puertos mínimos (Espacio, Recinto,
+│                                     # Equipamiento, ReservaPuntual) + Intervalo VO mínimo
+│                                     # (solo constructor: inicio < fin) — sin seSolapaCon()
+│                                     # ni DetectorDeChoques todavía, eso llega con au-03
+├── feature/crud-gestion-espacios    # Avance 1 (CRUD): Casos de Uso simples + Controllers/
+│                                     # Requests/Resources/rutas/vistas para las 5 tablas
+├── feature/au-03-choque-espacio     # extiende Intervalo con seSolapaCon() + agrega
+│                                     # DetectorDeChoques; bloqueante para au-02 y au-06
 ├── feature/au-01-inventario-grilla  # puede ir en paralelo a au-03
-├── feature/au-02-sugerencia-aula    # depende de domain-core + au-03
-├── feature/au-06-reservas-puntuales # depende de domain-core + au-03
+├── feature/au-02-sugerencia-aula    # depende de au-03
+├── feature/au-06-reservas-puntuales # depende de au-03
 └── feature/api-integration           # transversal
 ```
 
 Orden de merge: `project-setup → persistence-skeleton → domain-core →
-au-03 → (au-01 en paralelo) → au-02 → au-06 → api-integration`.
+crud-gestion-espacios → au-03 → (au-01 en paralelo) → au-02 → au-06 →
+api-integration`.
 
 **Reglas:**
 - Nunca commitear directo a `main`.
