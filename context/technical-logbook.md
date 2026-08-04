@@ -127,3 +127,28 @@ tiempo que exista solo el CRUD sin au-03.
 se repite — la primera es invariante de dominio, la segunda es
 orquestación de caso de uso, y confundirlas es lo que genera lógica
 duplicada entre capas.
+
+## 2026-08-04 — Inconsistencia de tipo: Espacio.piso (int vs VARCHAR)
+
+**Autor:** Fabián Zamora
+**Contexto:** Al implementar el repositorio Eloquent de Espacio en
+feature/crud-gestion-espacios, Claude Code detectó que Espacio::piso
+está tipado ?int en Domain/, pero aulas.piso es VARCHAR(10) en el
+esquema oficial — probablemente para soportar valores no numéricos como
+"PB" o "S1".
+**Consulta a la IA:** No se le consultó directamente; fue un hallazgo
+reportado como parte de la implementación del CRUD, respetando la
+restricción de no modificar Domain/ fuera de la única excepción permitida.
+**Qué se aceptó:** Se preservó el tipo actual sin modificarlo dentro de
+esta rama, haciendo el cast en el límite del repositorio, tal como
+reportó la IA.
+**Qué se rechazó y por qué:** No se corrigió Espacio.piso a string dentro
+de esta rama, porque hubiera sido una segunda excepción no planeada a
+"no tocar Domain" — se prefiere una rama dedicada y revisada aparte.
+**Error detectado:** Sí — el tipo de piso quedó mal definido desde
+feature/domain-core, sin verificar contra el tipo real del esquema
+oficial en ese momento.
+**Aprendizaje:** Al definir Entidades de dominio a partir de un esquema
+externo, hay que verificar el tipo de columna real (VARCHAR vs INT),
+no asumirlo por el nombre del campo — "piso" suena numérico pero el
+profesor lo modeló como texto a propósito.
