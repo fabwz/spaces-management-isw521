@@ -115,10 +115,14 @@ queda excluido sin importar su capacidad.
 
 ## Esquema de base de datos oficial
 
-Fuente: script SQL entregado por el profesor,
-`sistema_gestion_academica_utn.sql`, confirmado como base oficial. Es el
+Fuente: `context/sistema_gestion_academica_utn.sql` (script SQL entregado
+por el profesor, confirmado como base oficial, solo lectura). Es el
 esquema compartido de los cinco módulos del curso; solo se documentan aquí
 las tablas relevantes a este módulo (`GestionEspacios`).
+
+**Motor de base de datos: MySQL.** Confirmado por el equipo. El
+instalador de Laravel 13 trae SQLite como default — se cambia a MySQL en
+`.env` (`DB_CONNECTION=mysql`) apenas se clona el proyecto.
 
 > **Restricción obligatoria:** el esquema se usa exactamente tal como el
 > profesor lo entregó — mismos nombres de tabla, mismos nombres de
