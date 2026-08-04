@@ -72,3 +72,33 @@ cronológico.)*
 **Qué se rechazó y por qué:** El uso de `$table->check(...)` dentro del closure de `Schema::create`, porque no existe como método del Blueprint de Laravel — el `php artisan migrate` falló con `BadMethodCallException: Method Illuminate\Database\Schema\Blueprint::check does not exist`.
 **Error detectado:** La IA generó una sintaxis inventada asumiendo que el schema builder soporta CHECK constraints igual que otros motores. Se descubrió al correr la migración, y se corrigió moviendo ambos CHECK a `DB::statement('ALTER TABLE ... ADD CONSTRAINT ... CHECK (...)')` ejecutado después del `Schema::create`.
 **Aprendizaje:** El schema builder de Laravel no cubre toda la sintaxis SQL — features menos comunes como CHECK constraints hay que agregarlas con SQL crudo vía `DB::statement()`, y conviene verificar la documentación oficial de Laravel en vez de asumir que el ORM soporta 1:1 lo que el motor de base de datos permite.
+
+## 2026-08-04 — Construcción en dos etapas de Intervalo (domain-core vs au-03)
+
+**Autor:** Fabián Zamora
+**Contexto:** Al planear feature/crud-gestion-espacios (CRUD completo
+pedido por el profesor para el Avance 1), surgió la duda de dónde deben
+vivir las validaciones básicas de las Entidades (capacidad positiva,
+hora_fin > hora_inicio) sin romper la separación de Arquitectura
+Hexagonal, dado que domain-core se planeó sin Intervalo.
+**Consulta a la IA:** Se le preguntó específicamente dónde deberían vivir
+esas validaciones para las 4 entidades del CRUD (Espacio, Recinto,
+Equipamiento, ReservaPuntual), antes de que exista la lógica de detección
+de choques.
+**Qué se aceptó:** Las invariantes básicas van en el constructor de cada
+Entidad/VO en Domain/, nunca en el FormRequest (que solo valida forma de
+los datos). Para ReservaPuntual, en vez de duplicar la validación de
+horas inline y borrarla después, se construye Intervalo en dos etapas:
+domain-core crea el VO con solo el constructor (inicio < fin);
+au-03-choque-espacio lo extiende agregando seSolapaCon().
+**Qué se rechazó y por qué:** El plan original (domain-core sin Intervalo
+en absoluto) se descartó porque hubiera obligado a escribir la validación
+de horas dos veces (una temporal en la Entidad, otra definitiva en
+Intervalo) y luego recordar borrar la primera.
+**Error detectado:** N/A — fue un refinamiento de diseño, no una
+corrección de error.
+**Aprendizaje:** Al planear ramas de trabajo por fases, conviene
+preguntarse si una regla de negocio que "llega después" en el plan en
+realidad ya es necesaria antes, aunque sea en su forma mínima — evita
+trabajo duplicado y violaciones temporales de la regla de "un único
+lugar" para la lógica de dominio.
