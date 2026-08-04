@@ -29,7 +29,7 @@ class EspacioController extends Controller
             $espacio = $this->gestionarEspacios->crear(
                 $request->integer('recinto_id'),
                 $request->string('nombre')->toString(),
-                $request->filled('piso') ? $request->integer('piso') : null,
+                $request->filled('piso') ? $request->string('piso')->toString() : null,
                 $request->string('tipo')->toString(),
                 $request->filled('capacidad') ? $request->integer('capacidad') : null,
                 $request->input('no_disponible_desde'),
@@ -59,7 +59,7 @@ class EspacioController extends Controller
                 $id,
                 $request->integer('recinto_id'),
                 $request->string('nombre')->toString(),
-                $request->filled('piso') ? $request->integer('piso') : null,
+                $request->filled('piso') ? $request->string('piso')->toString() : null,
                 $request->string('tipo')->toString(),
                 $request->filled('capacidad') ? $request->integer('capacidad') : null,
                 $request->input('no_disponible_desde'),

@@ -17,7 +17,7 @@ final class GestionarEspacios
     public function crear(
         int $recintoId,
         string $nombre,
-        ?int $piso,
+        ?string $piso,
         string $tipo,
         ?int $capacidad,
         ?string $noDisponibleDesde,
@@ -49,7 +49,7 @@ final class GestionarEspacios
         int $id,
         int $recintoId,
         string $nombre,
-        ?int $piso,
+        ?string $piso,
         string $tipo,
         ?int $capacidad,
         ?string $noDisponibleDesde,
