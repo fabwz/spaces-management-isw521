@@ -33,6 +33,7 @@ spaces-management-isw521/
 │   ├── business-rules.md
 │   ├── architecture.md
 │   ├── technical-logbook.md
+│   ├── sistema_gestion_academica_utn.sql   # fuente oficial del profesor, SOLO LECTURA — nunca se edita
 │   └── api.md              # se agrega cuando se confirme la API externa
 ├── app/
 │   ├── Console/                        # default de Laravel

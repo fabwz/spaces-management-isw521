@@ -53,11 +53,16 @@ de datos compartido a nivel de diseño (ver `context/business-rules.md`).
 - Commits en inglés, Conventional Commits estricto:
   `<type>(<scope>): <description>`.
 - El esquema de base de datos oficial del profesor
-  (`sistema_gestion_academica_utn.sql`) se usa **exactamente como viene**:
-  no se agregan, renombran ni modifican tablas, columnas, tipos ni
+  (`context/sistema_gestion_academica_utn.sql`) se usa **exactamente como
+  viene**: no se agregan, renombran ni modifican tablas, columnas, tipos ni
   valores de enum. Todo mapeo entre ese esquema y el dominio (Entidades,
   Value Objects) se hace sin alterar el esquema origen — nunca se propone
-  una columna nueva "porque serviría mejor así".
+  una columna nueva "porque serviría mejor así". Ese archivo es de **solo
+  lectura**: nunca se edita, es la fuente de verdad contra la que se
+  comparan las migraciones. Si algo que el esquema exige no tiene un
+  equivalente directo en el schema builder de Laravel (ej. `CHECK`
+  constraints), se resuelve con SQL crudo vía `DB::statement()`, nunca
+  cambiando la lógica del esquema.
 - La integración de API REST externa sigue **pendiente de confirmación
   del profesor** (ver `context/architecture.md` → "Integración de API
   REST externa"). No implementar ninguna integración hasta que se
@@ -80,9 +85,9 @@ de datos compartido a nivel de diseño (ver `context/business-rules.md`).
 ## Stack técnico obligatorio
 
 TALL (Tailwind CSS + Alpine.js + Laravel 13 + Livewire) + TypeScript +
-consumo de al menos una API REST externa + autenticación JWT + variables de
-entorno + pruebas unitarias con Pest + Arquitectura Hexagonal (Ports &
-Adapters) + Domain-Driven Design.
+MySQL + consumo de al menos una API REST externa + autenticación JWT +
+variables de entorno + pruebas unitarias con Pest + Arquitectura
+Hexagonal (Ports & Adapters) + Domain-Driven Design.
 
 ## Bounded Context
 
