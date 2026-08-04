@@ -152,3 +152,25 @@ oficial en ese momento.
 externo, hay que verificar el tipo de columna real (VARCHAR vs INT),
 no asumirlo por el nombre del campo — "piso" suena numérico pero el
 profesor lo modeló como texto a propósito.
+
+## 2026-08-04 — Fix de Espacio.piso reveló una segunda inconsistencia en Application/Http
+
+**Autor:** Fabián Zamora
+**Contexto:** Al corregir el tipo de Espacio.piso en Domain/ (fix/espacio-
+piso-type-mismatch), se descubrió que el mismo problema de tipo persiste
+en capas superiores: GestionarEspacios.php sigue tipando ?int $piso, y
+EspacioController.php usa $request->integer('piso'), que coerciona
+valores no numéricos como "PB" a 0.
+**Consulta a la IA:** No se le consultó directamente; fue un hallazgo
+reportado por la IA al respetar el alcance exacto del fix de Domain,
+sin arreglar lo que encontró fuera de ese alcance.
+**Qué se aceptó:** Se documenta como pendiente en vez de corregirlo
+dentro de esta rama, para mantener cada fix acotado y revisable por
+separado.
+**Error detectado:** Sí — un mismo bug de tipo (piso numérico vs VARCHAR)
+tenía manifestaciones en 3 capas distintas (Domain, Infrastructure,
+Application/Http), y solo se había corregido la primera.
+**Aprendizaje:** Un cambio de tipo en una Entidad de dominio rara vez
+está aislado — conviene rastrear todas las capas que asumen ese tipo
+(type hints, coerciones de framework como $request->integer()) antes de
+dar el bug por cerrado, no solo corregir donde se detectó originalmente.
