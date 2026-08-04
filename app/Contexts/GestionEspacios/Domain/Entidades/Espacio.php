@@ -10,7 +10,7 @@ final class Espacio
         private ?int $id,
         private int $recintoId,
         private string $nombre,
-        private ?int $piso,
+        private ?string $piso,
         private string $tipo,
         private ?Capacidad $capacidad,
         private ?string $noDisponibleDesde,
@@ -32,7 +32,7 @@ final class Espacio
         return $this->nombre;
     }
 
-    public function piso(): ?int
+    public function piso(): ?string
     {
         return $this->piso;
     }
