@@ -30,6 +30,13 @@ solape = a_inicio < b_fin AND b_inicio < a_fin
 Esta regla vive únicamente en `Domain/ValueObjects/Intervalo.php`. Ningún
 otro archivo reimplementa esta comparación.
 
+**Construcción en dos etapas:** `feature/domain-core` crea `Intervalo`
+solo con la guarda de constructor (`inicio < fin`), necesaria para que
+`ReservaPuntual` valide horas desde el CRUD. `feature/au-03-choque-espacio`
+**extiende** ese mismo archivo agregando `seSolapaCon()` — nunca se crea
+un segundo `Intervalo` ni se reimplementa la validación de constructor en
+otro lugar mientras tanto.
+
 ---
 
 ## Regla 2 — Estados de uso considerados para detección de choques (AU-03)
