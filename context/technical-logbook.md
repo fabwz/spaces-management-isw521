@@ -102,3 +102,28 @@ preguntarse si una regla de negocio que "llega después" en el plan en
 realidad ya es necesaria antes, aunque sea en su forma mínima — evita
 trabajo duplicado y violaciones temporales de la regla de "un único
 lugar" para la lógica de dominio.
+
+## 2026-08-04 — Máquina de estados de ReservaPuntual: dominio vs. orquestación
+
+**Autor:** Fabián Zamora
+**Contexto:** Al planear feature/crud-gestion-espacios, surgió la duda de
+si ReservaPuntual debía tener ya lógica de cambio de estado
+(Solicitada→Aprobada, etc.) antes de que exista DetectorDeChoques (au-03).
+**Consulta a la IA:** Se le preguntó si el CRUD debía incluir la máquina
+de estados o dejarla completamente fuera hasta au-03, para evitar
+reimplementar la misma lógica dos veces (mismo riesgo que con Intervalo).
+**Qué se aceptó:** Separar dos conceptos — la validez de una transición
+de estado (invariante propia de la Entidad, va ya en ReservaPuntual como
+métodos aprobar()/rechazar()/cancelar()) es distinta de cuándo es seguro
+aprobar (orquestación del Caso de Uso, que sí depende de au-03 y se
+implementa después, reutilizando estos métodos sin tocarlos).
+**Qué se rechazó y por qué:** Dejar el cambio de estado completamente
+fuera del CRUD, porque hubiera dejado la Entidad sin protección ante
+transiciones inválidas (ej. pasar de Rechazada a Aprobada) durante el
+tiempo que exista solo el CRUD sin au-03.
+**Error detectado:** N/A — refinamiento de diseño.
+**Aprendizaje:** Separar "¿es válida esta transición en sí misma?" de
+"¿es seguro hacerla ahora, dado el contexto de negocio?" es un patrón que
+se repite — la primera es invariante de dominio, la segunda es
+orquestación de caso de uso, y confundirlas es lo que genera lógica
+duplicada entre capas.
